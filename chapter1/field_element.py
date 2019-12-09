@@ -1,9 +1,11 @@
 
-class FieldElement:
-    'class representing a finite filed element'
 
-    def __init__(self, num, prime):
-        if num > prime or num < 0:
+class FieldElement:
+    """class representing a finite filed element"""
+
+    def __init__(self, num: int, prime: int):
+        """constructor."""
+        if num > prime or num < 0 or type(num) != int or type(prime) != int:
             raise ValueError("illegal input")
         self.num = num
         self.prime = prime
@@ -28,6 +30,10 @@ class FieldElement:
     def __ne__(self, other):
         return not self == other
 
+    def __repr__(self):
+        return "FieldElement(num={},prime={})".format(self.num, self.prime)
+
 
 if __name__ == "__main__":
-    print("test")
+    tmp = FieldElement(12, 13)
+    print(tmp)
