@@ -4,7 +4,6 @@ import sys
 sys.path.append(os.pardir)
 from field_element import FieldElement
 
-
 def test_add():
     '''test add in finite field.'''
     element1 = FieldElement(num=3, prime=13)
@@ -21,9 +20,15 @@ def test_add_illegal():
     with pytest.raises(ValueError):
         actual = element1+element2
 
+
 def test_default_value():
-	'''test with illegal constructor arguments'''
-	with pytest.raises(ValueError):
-		tmp=FieldElement(num=-123,prime=123)
-	with pytest.raises(ValueError):
-		tmp2=FieldElement(num=123,prime=-123)
+    '''test with illegal constructor arguments'''
+    with pytest.raises(ValueError):
+        tmp = FieldElement(num=-123, prime=123)
+    with pytest.raises(ValueError):
+        tmp2 = FieldElement(num=123, prime=-123)
+    with pytest.raises(ValueError):
+        tmp3 = FieldElement(num=123.12, prime=1233)
+
+    with pytest.raises(ValueError):
+        tmp4=FieldElement(num=34,prime=123.123)
