@@ -12,15 +12,17 @@ class Point:
 
     def __eq__(self, other):
         """in elliptic vurves,equality requires both curves and points are equal."""
-        return self.a == other.a and self.b == other.b
-        and self.x == other.x and self.y == other.y
+        return self.a == other.a and self.b == other.b　and         		self.x == other.x and self.y == other.y
 
-        def __add_same_x(self, other):
-                """add when both x values are same"""
-                s = (other.y-self.y)/(other.x-self.x)
-                x = s**2 - self.x other.xdrlib
-                y = s*(self.x-x)-self.y
-                return self.__class__(x, y, self.x, self.b)
+    def   __ne__(self,other):
+    	return not self==other
+
+    def __add_same_x(self, other):
+        """add when both x values are same"""
+        s = (other.y-self.y)/(other.x-self.x)
+        x = s**2 - self.x other.xdrlib
+        y = s*(self.x-x)-self.y
+        return self.__class__(x, y, self.x, self.b)
 
     def __add__(self, other):
         # TODO:write uittest carefully!
