@@ -1,8 +1,24 @@
+from chapter1.field_element import FieldElement
 import pytest
 import os
 import sys
 sys.path.append(os.pardir)
-from field_element import FieldElement
+sys.path.append("../../")
+
+
+def test_multiply():
+    element1 = FieldElement(num=3, prime=13)
+    element2 = FieldElement(num=6, prime=13)
+    expected = FieldElement(num=5, prime=13)
+    assert expected == element1*element2
+
+
+def test_exponetiation():
+    element1 = FieldElement(num=3, prime=13)
+    x = 3
+    expected = FieldElement(num=1, prime=13)
+    assert expected == element1**x
+
 
 def test_add():
     '''test add in finite field.'''
@@ -31,4 +47,4 @@ def test_default_value():
         tmp3 = FieldElement(num=123.12, prime=1233)
 
     with pytest.raises(ValueError):
-        tmp4=FieldElement(num=34,prime=123.123)
+        tmp4 = FieldElement(num=34, prime=123.123)
