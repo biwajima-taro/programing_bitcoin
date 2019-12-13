@@ -10,6 +10,11 @@ class FieldElement:
         self.num = num
         self.prime = prime
 
+    def __check(self, other, error_message):
+        """check whether argument has the same prime"""
+        if self.prime != other.prime:
+            raise ValueError(error_message)
+
     def __eq__(self, other):
         if other is None:
             return False
@@ -37,20 +42,26 @@ class FieldElement:
         return self.__class__(num=num, prime=self.prime)
 
     def __pow__(self, exponent):
-        n=exponent % (self.prime-1)
-        num=pow(self.num,n,self.prime)
+        n = exponent % (self.prime-1)
+        num = pow(self.num, n, self.prime)
         #num = (self.num**exponent) % self.prime
         return self.__class__(num=num, prime=self.prime)
 
     def __repr__(self):
         return "FieldElement(num={},prime={})".format(self.num, self.prime)
 
+    def __mul__(self, other):
+        self.__check(
+            other, error_message="cannot multiply in different fields")
+        num = (self.num*other.num) % self.prime
+        return self.__class__(num=num, prime=self.prime)
+
+
 if __name__ == "__main__":
     import time
     tmp = FieldElement(12, 13)
-    #ex7
-    for p in [7,11,17,31]:
-        tmp=[ pow(ele,p-1,p) for ele in range(1,p)]
+    # ex7
+    for p in [7, 11, 17, 31]:
+        tmp = [pow(ele, p-1, p) for ele in range(1, p)]
         print(tmp)
         time.sleep(2)
-
