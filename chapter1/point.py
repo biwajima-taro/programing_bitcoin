@@ -1,6 +1,4 @@
-import sys
-import os
-sys.path.append(os.pardir)
+
 
 class Point:
     def __init__(self, x, y, a, b):
@@ -17,7 +15,7 @@ class Point:
         """efficient calculation by binary expansion """
         coef = coefficient
         current = self
-        result = self.__class__(None, None, self, self.a, self.b)
+        result = self.__class__(None, None,  self.a, self.b)
         while coef:
             if coef & 1:
                 result += current

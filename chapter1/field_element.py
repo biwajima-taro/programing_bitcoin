@@ -5,6 +5,7 @@ class FieldElement:
 
     def __init__(self, num: int, prime: int):
         """constructor."""
+        print("num:{} prime:{}".format(num,prime))
         if num > prime or num < 0 or type(num) != int or type(prime) != int:
             raise ValueError("illegal input")
         self.num = num
@@ -58,10 +59,4 @@ class FieldElement:
 
 
 if __name__ == "__main__":
-    import time
-    tmp = FieldElement(12, 13)
-    # ex7
-    for p in [7, 11, 17, 31]:
-        tmp = [pow(ele, p-1, p) for ele in range(1, p)]
-        print(tmp)
-        time.sleep(2)
+    print("")
