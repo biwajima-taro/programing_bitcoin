@@ -10,7 +10,7 @@ write bicoin codes from scratch with programing_bitcoin ,which is published from
 
 ## reference  
 
-### reference for programing bitcoin  
+### reference for [programing bitcoin](https://www.amazon.co.jp/Programming-Bitcoin-Learn-Program-Scratch/dp/1492031496)  
 
 ### chapter3  
 
