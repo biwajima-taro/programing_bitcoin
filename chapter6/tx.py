@@ -14,6 +14,7 @@ class Tx:
 
     @classmethod
     def parse(cls, s: bytes, testnet=False):
+        """make transaction class from bytes input"""
         version = little_endiant_to_int(s.read(4))
         num_inputs = read_variant(s)
         inputs = []
