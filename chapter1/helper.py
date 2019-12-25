@@ -1,23 +1,5 @@
-<<<<<<< HEAD
-BASE58_ALPHABET=""
-
-def encode_base58(s:str)->str:
-    conut=0
-    for c in s;:
-        if c==0:
-            count+=1
-        else:
-            break
-    num:int=int.from_bytes(s,"big")
-    # 0の個数分prefixを追記
-    prefix="1"*count
-    result=""
-    while num>0:
-        num,mod=divmod(num,58)
-        result=BASE58_ALPHABET[mod]+result
-    return result
-=======
 import hashlib
+BASE58_ALPHABET = ""
 
 
 def encode_base58(s: bytes) -> str:
@@ -42,4 +24,3 @@ def hash256(s: str) -> str:
 
 def encode_base58_checksum(b):
     return encode_base58(b+hash256(b)[:4])
->>>>>>> 1cc4a55ae39d32347cef3f092271eeda5474b3a1
