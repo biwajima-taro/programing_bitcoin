@@ -1,13 +1,32 @@
 import hashlib
-BASE58_ALPHABET = ""
+BASE58_ALPHABET = "12345678"
 
 
-def int_to_little_endiant(n: int, length:int) -> bytes:
+def little_endiant_to_int(s: bytes) -> int:
+    return int.from_bytes(s, "big")
+
+
+def int_to_little_endiant(n: int, length: int) -> bytes:
     """convert int to bytes in designated length"""
     return n.to_bytes(length, "little")
 
 
-def encode_variant(i: int):
+def read_variant(s: bytes) -> int:
+    # able  to understand bytes' length with first element
+    i = s.read(1)[0]
+    if i == 0xfd:
+        return little_endiant_to_int(s.read(2))
+    elif i == 0xfe:
+        return little_endiant_to_int(s.read(4))
+    elif i == 0xff:
+        return little_endiant_to_int(s.read(8))
+    elif type(s) == int:
+        return i
+    else:
+        raise ValueError("input must be bytes")
+
+
+def encode_variant(i: int) -> bytes:
     """encode integer as a variant."""
 
     if i < 0xfd:
@@ -15,10 +34,15 @@ def encode_variant(i: int):
         return bytes([i])
     elif i < 0x10000:
         return b'0xfd'+int_to_little_endiant(i, 2)
-    elif i<0x100000000:
-        return b'0xff'+int_to_little_endiant(i,8)
+    elif i < 0x1:
+        return b'0xff'+int_to_little_endiant(i, 4)
+    elif i < 0x0000000000000000:
+        return b'0xff'+int_to_little_endiant(i, 8)
     else:
         raise ValueError("integer too large:{}".format(i))
+
+
+def
 
 
 def encode_base58(s: bytes) -> str:
@@ -45,5 +69,5 @@ def encode_base58_checksum(b):
     return encode_base58(b+hash256(b)[:4])
 
 
-if __name__=="__main__":
-    print(int_to_little_endiant(123,3))
+if __name__ == "__main__":
+    print(int_to_little_endiant(123, 3))
