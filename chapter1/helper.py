@@ -3,7 +3,7 @@ BASE58_ALPHABET = "12345678"
 
 
 def little_endiant_to_int(s: bytes) -> int:
-    return int.from_bytes(s, "big")
+    return int.from_bytes(s, "little")
 
 
 def int_to_little_endiant(n: int, length: int) -> bytes:
@@ -12,7 +12,7 @@ def int_to_little_endiant(n: int, length: int) -> bytes:
 
 
 def read_variant(s: bytes) -> int:
-    # able  to understand bytes' length with first element
+    #able  to understand bytes' length with first element
     i = s.read(1)[0]
     if i == 0xfd:
         return little_endiant_to_int(s.read(2))
@@ -42,7 +42,7 @@ def encode_variant(i: int) -> bytes:
         raise ValueError("integer too large:{}".format(i))
 
 
-def
+
 
 
 def encode_base58(s: bytes) -> str:
