@@ -1,4 +1,4 @@
-from chapter1.helper import little_endiant_to_int
+from chapter1.helper import little_endiant_to_int, int_to_little_endiant
 
 
 class TxOut:
@@ -13,5 +13,11 @@ class TxOut:
     @classmethod
     def parse(cls, s: bytes) -> TxOut:
         amount = little_endiant_to_int(s.read(8))
+        # TODO:implement Script class
         script_pubkey = Script.parse(s)
         return TxOut(amount, script_pubkey)
+
+    def serialize(self):
+        result: bytes = int_to_little_endiant(self.amount, 8)
+        result += self.script_pubkey.serialize()
+        return result
