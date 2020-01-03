@@ -12,7 +12,7 @@ def int_to_little_endiant(n: int, length: int) -> bytes:
 
 
 def read_variant(s: bytes) -> int:
-    #able  to understand bytes' length with first element
+    # able  to understand bytes' length with first element
     i = s.read(1)[0]
     if i == 0xfd:
         return little_endiant_to_int(s.read(2))
@@ -42,9 +42,6 @@ def encode_variant(i: int) -> bytes:
         raise ValueError("integer too large:{}".format(i))
 
 
-
-
-
 def encode_base58(s: bytes) -> str:
     count: int = 0
     for c in s:
@@ -55,14 +52,21 @@ def encode_base58(s: bytes) -> str:
     num: int = int.from_bytes(s, "big")
     prefix: str = "1"
     result: str = ""
-    # TODO:write rest of the function
-    return result
+    while num > 0:
+        num, mod = divmod(num, 58)
+        result: str = BASE58_ALPHABET[mod]+result
+    return prefix+result
 
 
-def hash256(s: str) -> str:
+def hash160(s: str) -> str:
     # https://www.pebblewind.com/entry/2018/05/05/230100
     # s.encode('utf-8')にする必要がある？
     return hashlib.new("rpemd160", hashlib.sha256(s).digest()).digest()
+
+
+def hash256(s):
+    '''two rounds of sha256'''
+    return hashlib.sha256(hashlib.sha256(s.encode("utf-8")).digest()).digest()
 
 
 def encode_base58_checksum(b):
