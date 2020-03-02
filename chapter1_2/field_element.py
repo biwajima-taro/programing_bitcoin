@@ -25,10 +25,16 @@ class FieldElement:
             num = (self.num-other.num) % self.prime
             return self.__class__(num, self.prime)
 
-    def __check(self, other: FieldElement) -> bool:  
+    def __check(self, other: FieldElement) -> bool:
         if self.prime == other.prime:
             return True
          raise TypeError("two number must be the same prime")
+    
+    def __mul__(self,other:FieldElement)->FieldElement:
+        
+        if self.__check(other):
+            num=(self.num*other.num)%self.prime
+            return self.__class__(slef.num,self.prime)
 
 
 if __name__ == "__main__":
