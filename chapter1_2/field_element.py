@@ -1,6 +1,13 @@
 
 class FieldElement:
     def __init__(self, num: int, prime: int):
+        """
+        class for finite field calculation
+
+        Args:
+            num (int): []
+            prime (int): [description]
+        """
         self.num = num
         self.prime = prime
 
@@ -19,26 +26,35 @@ class FieldElement:
         if self.__check(other):
             num = (self.num+other.num) % self.prime
             return self.__class__(num, self.prime)
+        raise TypeError("two number must be the same prime")
 
     def __sub__(self, other: FieldElement) -> FieldElement:
         if self.__check(other):
             num = (self.num-other.num) % self.prime
             return self.__class__(num, self.prime)
+        raise TypeError("two number must be the same prime")
 
-    def __pow__(self, exponent) -> FieldElement:
-        num = (self.num**exponent) % self.prime
-        return self.__class__(num, self.prime)
+        
+
+  #  def __pow__(self, exponent) -> FieldElement:
+   #     num = (self.num**exponent) % self.prime
+    #    return self.__class__(num, self.prime)
 
     def __check(self, other: FieldElement) -> bool:
         if self.prime == other.prime:
             return True
-         raise TypeError("two number must be the same prime")
-    
-    def __mul__(self,other:FieldElement)->FieldElement:
+
+    def __mul__(self, other: FieldElement)->FieldElement:
 
         if self.__check(other):
-            num=(self.num*other.num)%self.prime
-            return self.__class__(slef.num,self.prime)
+            num = (self.num*other.num) % self.prime
+            return self.__class__(num, self.prime)
+        raise TypeError("two number must be the same prime")
+
+    def __pow__(self, exponent: int)->FieldElement:
+        n = exponent % (self.prime-1)
+        num = pow(self.num, n, self.prime)
+        return self.__class__(num, self.prime)
 
 
 if __name__ == "__main__":
