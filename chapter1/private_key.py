@@ -16,6 +16,5 @@ class PrivateKey:
         return "{:x}".format(self.secret).zfill(64)
 
 
-
 if __name__=="__main__":
    tnp= PrivateKey()
