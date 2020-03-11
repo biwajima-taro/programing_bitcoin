@@ -5,13 +5,13 @@ from typing import Any
 class Point:
     def __init__(self, x: Any, y: Any, a: Any, b: Any):
         """
-        all arguments x,y,a,b must be the same class        
+        all arguments x,y,a,b must be the same class
         Parameters
         ----------
         x : Any
         y : Any
         a : Any
-        b : Any        
+        b : Any
         Raises
         ------
         ValueError
@@ -54,12 +54,16 @@ class Point:
     def __repr__(self) -> str:
         return f"Point(x={self.x},y={self.y},a={self.a},b={self.b})"
 
-    def __rmul__(self, coefficient: int) -> Point:
-        # point at intfinity or representing zero in finitefield
-        product = self.__class__(None, None, self.a, self.b)
-        for _ in range(coefficient):
-            product += self
-        return product
+    def __rmul__(self, coefficient: int)->Point:
+        coef = coefficient
+        current = self  # <1>
+        result = self.__class__(None, None, self.a, self.b)  # <2>
+        while coef:
+            if coef & 1:  # <3>
+                result += current
+            current += current  # <4>
+            coef >>= 1  # <5>
+        return result
 
 
 if __name__ == "__main__":
