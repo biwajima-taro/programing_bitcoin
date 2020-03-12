@@ -1,5 +1,10 @@
 from __future__ import annotations
 from typing import Any
+from field_element import S256Field
+# eliptica curve parameter for bicoin!
+A = 0
+B = 7
+N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141
 
 
 class Point:
@@ -64,6 +69,27 @@ class Point:
             current += current  # <4>
             coef >>= 1  # <5>
         return result
+
+
+class S256Point(Point):
+
+    def __init__(self, x, y, a=None, b=None):
+        a, b = S256Field(A), S256Field(B)
+        if type(x) == int:
+            super().__init__(x=S256Field(x), y=S256Field(y), a=a, b=b)
+        else:
+            # x is S56Field case
+            super().__init__(x=x, y=y, a=a, b=b)
+
+    def __repr__(self):
+        if self.x is None:
+            return "S256Point(infinity)"
+        else:
+            return f"S256point({self.x},{self.y})"
+
+    def __rmul__(self, coefficient: int):
+        coef = coefficient % N
+        return super().__rmul__(coef)
 
 
 if __name__ == "__main__":

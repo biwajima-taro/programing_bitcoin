@@ -1,4 +1,6 @@
 from __future__ import annotations
+# prime num for bitcoin
+P = 2**256 - 2**32 - 977
 
 
 class FieldElement:
@@ -16,7 +18,7 @@ class FieldElement:
     def __repr__(self) -> str:
         return f"FieldElement_{self.prime}({self.num})"
 
-    def __truediv__(self, other:FieldElement)->FieldElement:
+    def __truediv__(self, other: FieldElement)->FieldElement:
         """definition for division between FieldElement
         Parameters
         ----------
@@ -24,11 +26,11 @@ class FieldElement:
         Returns
         -------
         FieldElement
-        """        
+        """
         num = self.num*pow(other.num, self.prime-2, self.prime) % self.prime
         return self.__class__(num, self.prime)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: FieldElement) -> bool:
         if other is None:
             return False
         return self.num == other.num and self.prime == other.prime
@@ -55,6 +57,7 @@ class FieldElement:
     def __check(self, other: FieldElement) -> bool:
         if self.prime == other.prime:
             return True
+        return None
 
     def __mul__(self, other: FieldElement) -> FieldElement:
 
@@ -69,6 +72,15 @@ class FieldElement:
         return self.__class__(num, self.prime)
 
 
+class S256Field(FieldElement):
+    def __init__(self, num: int, prime: int = None):
+        super().__init__(num=num, prime=P)
+
+    def __repr__(self):
+        # zfill  add 0s to make input length 6
+        return "{:x}".format(self.num).zfill(64)
+
+
 if __name__ == "__main__":
     # TODO execise2
     # TODO unittest
@@ -78,3 +90,6 @@ if __name__ == "__main__":
     tmp = [FieldElement(num=3, prime=19)*FieldElement(i, prime=19)
            for i in range(18)]
     print(tmp)
+
+    a = S256Field(3)
+    print(a)
