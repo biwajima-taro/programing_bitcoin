@@ -59,7 +59,7 @@ class Point:
     def __repr__(self) -> str:
         return f"Point(x={self.x},y={self.y},a={self.a},b={self.b})"
 
-    def __rmul__(self, coefficient: int)->Point:
+    def __rmul__(self, coefficient: int) -> Point:
         coef = coefficient
         current = self  # <1>
         result = self.__class__(None, None, self.a, self.b)  # <2>
@@ -90,6 +90,19 @@ class S256Point(Point):
     def __rmul__(self, coefficient: int):
         coef = coefficient % N
         return super().__rmul__(coef)
+
+    def sec(self, compressed=True):
+        '''returns the binary version of the SEC format'''
+        if compressed:
+            if self.y.num % 2 == 0:
+                return b'\x02' + self.x.num.to_bytes(32, 'big')
+            else:
+                return b'\x03' + self.x.num.to_bytes(32, 'big')
+        else:
+            
+            return b'\x04' + self.x.num.to_bytes(32, 'big') + \
+                self.y.num.to_bytes(32, 'big')
+    # end::source1[]
 
 
 if __name__ == "__main__":
