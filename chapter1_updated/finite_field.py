@@ -13,7 +13,8 @@ class FiniteField:
         if other is None:
             return False
         # prime=5.num=0 and prime=5,num=5 isnt equal?
-        return self.num == other.num and self.prime == other.prime
+        return self.prime == other.prime and (self.num % self.prime) ==\
+            (other.num % self.prime)
 
     def __add__(self, other):
         if self.prime != other.prime:
