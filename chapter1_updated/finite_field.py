@@ -38,9 +38,23 @@ class FiniteField:
     def __pow__(self, exponent: int):
         num = (self.num**exponent) % self.prime
         return self.__class__(num, self.prime)
+   
+    def __truediv__(self, other):
+        if self.prime != other.prime:
+            raise ValueError("")
+        other = other**(self.prime-2)
+        print(other)
+        return self*other
 
 
 if __name__ == "__main__":
+    a = FiniteField(2, 19)
+    b = FiniteField(7, 19)
+    print(a/b)
+    print(b)
+    import time
+    time.sleep(10)
+
     print(repr(FiniteField(3, 100)))
     num_list = [1, 2, 3, 4, 5, 7, 9, 13, 18]
     for num in num_list:
@@ -51,9 +65,9 @@ if __name__ == "__main__":
 
     print("\n\n")
     ###############################
-    num_list=[7,13,31]
+    num_list = [7, 13, 31]
     for prime in num_list:
-        tmp_set=set()
-        for num in range(1,prime):
-            tmp_set.add((num**(prime-1))%prime)
+        tmp_set = set()
+        for num in range(1, prime):
+            tmp_set.add((num**(prime-1)) % prime)
         print(tmp_set)
