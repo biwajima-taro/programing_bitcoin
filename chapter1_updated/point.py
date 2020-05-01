@@ -24,14 +24,15 @@ class Point:
             x = s**2-self.x-other.x
             y = s*(self.x-x)-self.y
             return self.__class__(x, y, self.a, self.b)
+
+        if self == other and self.y == 0:
+            return self.__class__(None, None, self.a, self.b)
+
         if self == other:
             s = (3*self.x+self.a)/(2*self.y)
             x = s**2-2*self.x
             y = s*(self.x-x)-self.y
             return self.__class__(x, y, self.a, self.b)
-
-        if self == other and self.y == 0:
-            return self.__class__(None, None, self.a, self.b)
 
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b and self.x == other.x \
