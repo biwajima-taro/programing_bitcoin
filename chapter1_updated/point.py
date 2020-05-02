@@ -44,3 +44,13 @@ class Point:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.a!r},{self.a!r},{self.x!r},\
             {self.y!r})"
+
+    def __rmul__(self, coef: int):
+        current = self
+        result = self.__class__(None, None, self.a, self.b)
+        while coef:
+            if coef & 1:
+                result += current
+            current += current
+            coef >>= 1
+        return result
