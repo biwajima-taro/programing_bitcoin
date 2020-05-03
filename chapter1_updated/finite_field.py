@@ -12,9 +12,13 @@ class FiniteField:
     def __eq__(self, other):
         if other is None:
             return False
+        if other is 0 and self.num == 0:
+            return True
+        else:
+            return False
+
         # prime=5.num=0 and prime=5,num=5 isnt equal?
-        return self.prime == other.prime and (self.num % self.prime) ==\
-            (other.num % self.prime)
+        return self.prime == other.prime and (self.num % self.prime) == (other.num % self.prime)
 
     def __add__(self, other):
         if self.prime != other.prime:
@@ -38,7 +42,7 @@ class FiniteField:
     def __pow__(self, exponent: int):
         num = (self.num**exponent) % self.prime
         return self.__class__(num, self.prime)
-   
+
     def __truediv__(self, other):
         if self.prime != other.prime:
             raise ValueError("")
@@ -48,7 +52,11 @@ class FiniteField:
 
 
 if __name__ == "__main__":
+
     a = FiniteField(2, 19)
+    print(a == 9)
+    import time
+    time.sleep(10)
     b = FiniteField(7, 19)
     print(a/b)
     print(b)
