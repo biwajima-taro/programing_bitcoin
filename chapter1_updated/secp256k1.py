@@ -19,4 +19,4 @@ class S256Point(Point):
         super().__init__(x=S256Point(x), y=S256Point(y), a=a, b=b)
 
     def sec(self):
-        return b"\x04"+self.x.num_to_bytes(32,"big")+self.y.num_to_bytes(32,"big")
+        return b"\x04"+self.x.to_bytes(32,"big")+self.y.to_bytes(32,"big")
