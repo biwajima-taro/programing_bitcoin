@@ -1,7 +1,7 @@
 class FieldElement:
     def __init__(self, num: int, prime: int):
-        if num >= prime or num < 0:
-            error_message = ""
+        if num >= prime or num < 0 or type(num) != int or type(prime) != int:
+            error_message = "num,prime must be integer ,and num <prime"
             raise ValueError(error_message)
         self.num = num
         self.prime = prime
@@ -48,9 +48,11 @@ class FieldElement:
         other = other**(self.prime-2)
         print(other)
         return self*other
-    def __rmul__(self,num):
-        num=self.num*num
-        return self.__class__(num,self.prime)
+
+    def __rmul__(self, num):
+
+        return self*self.__class__(num, self.prime)
+
 
 if __name__ == "__main__":
 
