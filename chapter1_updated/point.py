@@ -7,7 +7,6 @@ class Point:
         if self.x is None and self.y is None:
             return
         if self.y**2 != x**3+self.a*self.x+self.b:
-        
             raise ValueError("not on the curve")
 
     def __add__(self, other):
@@ -25,7 +24,7 @@ class Point:
             x = s**2-self.x-other.x
             y = s*(self.x-x)-self.y
             return self.__class__(x, y, self.a, self.b)
-        #0*self.x is used in case of any data types
+        # 0*self.x is used in case of any data types
         if self == other and self.y == 0*self.x:
             return self.__class__(None, None, self.a, self.b)
 
@@ -33,7 +32,7 @@ class Point:
             s = (3*self.x+self.a)/(2*self.y)
             x = s**2-2*self.x
             y = s*(self.x-x)-self.y
-            
+
             return self.__class__(x, y, self.a, self.b)
 
     def __eq__(self, other):
@@ -65,12 +64,12 @@ class Point:
 
 
 if __name__ == "__main__":
-    from finite_field import FiniteField
+    from field_element import FieldElement
     prime = 223
-    a = FiniteField(0, prime)
-    b = FiniteField(7, prime)
-    x = FiniteField(47, prime)
-    y = FiniteField(71, prime)
+    a = FieldElement(0, prime)
+    b = FieldElement(7, prime)
+    x = FieldElement(47, prime)
+    y = FieldElement(71, prime)
     p = Point(x, y, a, b)
     print(p)
     for num in range(21):

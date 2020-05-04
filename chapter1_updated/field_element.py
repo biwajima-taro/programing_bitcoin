@@ -12,11 +12,7 @@ class FieldElement:
     def __eq__(self, other):
         if other is None:
             return False
-        if other is 0:
-            if self.num == 0:
-                return True
-            return False
-        # prime=5.num=0 and prime=5,num=5 isnt equal?
+            # prime=5.num=0 and prime=5,num=5 isnt equal?
         return self.prime == other.prime and (self.num % self.prime) == (other.num % self.prime)
 
     def __add__(self, other):
@@ -56,17 +52,17 @@ class FieldElement:
 
 if __name__ == "__main__":
 
-    a = FiniteField(2, 19)
+    a = FieldElement(2, 19)
     print(a == 9)
     import time
     time.sleep(10)
-    b = FiniteField(7, 19)
+    b = FieldElement(7, 19)
     print(a/b)
     print(b)
     import time
     time.sleep(10)
 
-    print(repr(FiniteField(3, 100)))
+    print(repr(FieldElement(3, 100)))
     num_list = [1, 2, 3, 4, 5, 7, 9, 13, 18]
     for num in num_list:
         tmp_set = set()
