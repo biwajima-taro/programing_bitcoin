@@ -25,6 +25,11 @@ def hash256(s):
     return hashlib.sha256(hashlib.sha256(s).digest()).digest()
 
 
-def encode_base58_checksum(adress: nutes):
+def encode_base58_checksum(adress: bytes):
     return encode_base58(adress+hash256(adress)[:4])
+
+
+def hash160(s):
+    '''sha256 followed by ripemd160'''
+    return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()
 
