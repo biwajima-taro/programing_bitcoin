@@ -1,14 +1,21 @@
+from ..field_element import FieldElement
+import pytest
 import sys
 import os
 sys.path.append(os.pardir)
 sys.path.append("../../")
 
-import pytest
-from ..field_element import FieldElement
-
-
+#TODO:make test clener with parameterize
 def test_scalar_multiply():
-    #test for 3*FieldElemntt()
+    element1 = FieldElement(num=3, prime=13)
+    expected = FieldElement(num=0, prime=13)
+    assert 0*element1 == expected
+    expected = FieldElement(num=6, prime=13)
+    assert 2*element1 == expected
+    expected = FieldElement(num=4, prime=13)
+    assert 10*element1 == expected
+    # test for 3*FieldElemntt()
+
 
 def test_multiply():
     element1 = FieldElement(num=3, prime=13)
