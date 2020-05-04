@@ -7,6 +7,7 @@ class Point:
         if self.x is None and self.y is None:
             return
         if self.y**2 != x**3+self.a*self.x+self.b:
+        
             raise ValueError("not on the curve")
 
     def __add__(self, other):
@@ -24,14 +25,15 @@ class Point:
             x = s**2-self.x-other.x
             y = s*(self.x-x)-self.y
             return self.__class__(x, y, self.a, self.b)
-
-        if self == other and self.y == 0:
+        #0*self.x is used in case of any data types
+        if self == other and self.y == 0*self.x:
             return self.__class__(None, None, self.a, self.b)
 
         if self == other:
             s = (3*self.x+self.a)/(2*self.y)
             x = s**2-2*self.x
             y = s*(self.x-x)-self.y
+            
             return self.__class__(x, y, self.a, self.b)
 
     def __eq__(self, other):
@@ -46,11 +48,30 @@ class Point:
             {self.y!r})"
 
     def __rmul__(self, coef: int):
+        # point multiplication
         current = self
+        print("**********************")
         result = self.__class__(None, None, self.a, self.b)
         while coef:
+            print("++++++++++")
+            print(current)
             if coef & 1:
                 result += current
+            print("current***")
             current += current
+
             coef >>= 1
         return result
+
+
+if __name__ == "__main__":
+    from finite_field import FiniteField
+    prime = 223
+    a = FiniteField(0, prime)
+    b = FiniteField(7, prime)
+    x = FiniteField(47, prime)
+    y = FiniteField(71, prime)
+    p = Point(x, y, a, b)
+    print(p)
+    for num in range(21):
+        result = num*p
