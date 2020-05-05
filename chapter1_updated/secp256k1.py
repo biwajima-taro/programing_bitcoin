@@ -20,8 +20,20 @@ class S256Point(Point):
         a, b = S256Field(A), S256Field(B)
         super().__init__(x=S256Field(x), y=S256Field(y), a=a, b=b)
 
+    def __rmul__(self, coefficient: int):
+        coef = coefficient % N
+        return super().__rmul__(coef)
+
     def sec(self, compressed=True):
-        return b"\x04"+self.x.to_bytes(32, "big")+self.y.to_bytes(32, "big")
+        if compressed:
+            if self.y.num % 2 == 0:
+                return b"\x02"+self.x.num.to_bytes(32, "big")
+            else:
+                return b"\x03"+self.x.num.to_bytes(32, "big")
+        else:
+            # b"\x04".hex()
+            # with hex() you can display hexadecimal version
+            return b"\x04"+self.x.to_bytes(32, "big")+self.y.to_bytes(32, "big")
 
     def hash160(self, compressed=True, testnet=False):
         return hash160(self.sec(compressed))
@@ -31,5 +43,5 @@ class S256Point(Point):
         if testnet:
             prefix = b"\x6f"
         else:
-            prefix = b"\x00"
+            prefix = b"\x"
         return encode_base58_checksum(prefix+h160)
