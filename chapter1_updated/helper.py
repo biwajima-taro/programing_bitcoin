@@ -33,3 +33,10 @@ def hash160(s):
     '''sha256 followed by ripemd160'''
     return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()
 
+
+def little_endian_to_int(b: bytes):
+    return int.from_bytes(b, "little")
+
+
+def int_to_little_endian(n: int, length: int):
+    return n.to_bytes(length, "little")
