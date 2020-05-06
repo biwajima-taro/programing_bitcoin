@@ -40,3 +40,10 @@ def little_endian_to_int(b: bytes):
 
 def int_to_little_endian(n: int, length: int):
     return n.to_bytes(length, "little")
+
+
+def read_variant(s):
+    i = s.read(1)[0]
+    if i == 0xfd:
+        return little_endian_to_int(s.read(2))
+    
