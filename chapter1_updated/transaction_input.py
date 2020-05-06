@@ -1,9 +1,6 @@
 from helper import little_endian_to_int
+from script import Script
 
-
-class Script:
-    def parse(self):
-        pass
 
 
 class TxIn:
