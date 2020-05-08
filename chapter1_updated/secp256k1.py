@@ -38,6 +38,13 @@ class S256Point(Point):
     def hash160(self, compressed=True, testnet=False):
         return hash160(self.sec(compressed))
 
+    def verify(self, z, sig):
+        s_inv = pow(sig.s, N - 2, N)  # <1>
+        u = z * s_inv % N  # <2>
+        v = sig.r * s_inv % N  # <3>
+        total = u * G + v * self  # <4>
+        return total.x.num == sig.r  # <5>
+
     def address(self, compressed=True, testnet=False):
         h160 = self.hash160(compressed)
         if testnet:
