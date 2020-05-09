@@ -2,6 +2,7 @@ from point import Point
 from field_element import FieldElement
 from helper import hash160, encode_base58_checksum
 from config import N
+from signature import Signature
 A = 0
 B = 7
 P = 2**256 - 2**32 - 977
@@ -38,12 +39,21 @@ class S256Point(Point):
     def hash160(self, compressed=True, testnet=False):
         return hash160(self.sec(compressed))
 
-    def verify(self, z, sig):
-        s_inv = pow(sig.s, N - 2, N)  # <1>
-        u = z * s_inv % N  # <2>
-        v = sig.r * s_inv % N  # <3>
-        total = u * G + v * self  # <4>
-        return total.x.num == sig.r  # <5>
+    def verify(self, z: bytes, sig: Signature):
+        """[summary]
+
+        Parameters
+        ----------
+        z : bytes
+            hash value
+        sig : Signature
+            [description]
+        """
+        s_inv = pow(sig.s, N-2, N)
+        u = z*s_inv % N
+        v = sig.r*s_ing % N
+        total = u*G+v*P*self
+        return total.x.num == sig.r
 
     def address(self, compressed=True, testnet=False):
         h160 = self.hash160(compressed)
