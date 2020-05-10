@@ -76,4 +76,16 @@ def decode_base58(s):
 
 
 def p2pkh_script(h160: bytes):
+    """[summary]
+    return p2pkh script pubkey
+    Parameters
+    ----------
+    h160 : bytes
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """    
     return Script([0x76, 0xa9, h160, 0x88, 0xac])
