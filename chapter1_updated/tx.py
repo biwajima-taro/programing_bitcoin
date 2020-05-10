@@ -8,7 +8,6 @@ from transaction_fetcher import TxFetcher
 SIGHASH_ALL = 1
 
 
-
 class Tx:
     def __init__(self, version, tx_ins, tx_outs, locktime, testnet=False):
         self.version = version
@@ -84,13 +83,23 @@ class Tx:
         s += int_to_little_endian(SIG)
         h256 = hash256(s)
         return int.from_bytes(h256, "big")
-    
+
     def verify_input(self, input_index: int):
         tx_in: TxIn = self.tx_ins[input_index]
         script_pubkey = tx_in.script_pubkey(testnet=self.testnet)
         z = self.sig_hash(input_index)
         comined = tx_in.script_sig+script_pubkey
         return comined.evaluate()
+
+    def verify(self):
+        if self.fee() < 0:
+            # ==0 is allowed?
+            return False
+        for i in range(len(self.tx_outs)):
+            if not self.verify_input(i):
+                return False
+        return True
+
 
 
 class TxIn:
