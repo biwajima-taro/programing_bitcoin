@@ -1,4 +1,4 @@
-from helper import int_to_little_endian, hash256SS, little_endian_to_int, read_variant, encode_variant
+from helper import int_to_little_endian, hash256, little_endian_to_int, read_variant, encode_variant
 from transaction_input import TxIn
 from transaction_output import TxOut
 from typing import List
@@ -13,10 +13,12 @@ class Tx:
         self.version = version
         self.tx_ins: List[TxIn] = tx_ins
         self.tx_outs: List[TxOut] = tx_outs
+        self.locktime = locktime
+        self.testnet = testnet
 
     def fee(self, testnet=False):
         input_sum = 0
-        outptut_sum = 0
+        output_sum = 0
         for txin in self.tx_ins:
             input_sum += txin.value(testnet)
         for txout in self.tx_outs:
@@ -36,7 +38,6 @@ class Tx:
 
     @classmethod
     def parse(cls, s, testnet=False):
-        import time
         version = little_endian_to_int(s.read(4))
         num_of_input = read_variant(s)
         inputs = []
@@ -58,7 +59,7 @@ class Tx:
         Parameters
         ----------
         input_index : int
-            [description]
+            [description]\
 
         Returns
         -------
@@ -78,9 +79,9 @@ class Tx:
 
         s += encode_variant(len(self.tx_outs))
         for tx_out in self.tx_outs:
-            s += tx_outs.serialize()
+            s += tx_out.serialize()
         s += int_to_little_endian(self.locktime, 4)
-        s += int_to_little_endian(SIG)
+        s += int_to_little_endian(SIGHASH_ALL)
         h256 = hash256(s)
         return int.from_bytes(h256, "big")
 
@@ -99,7 +100,6 @@ class Tx:
             if not self.verify_input(i):
                 return False
         return True
-
 
 
 class TxIn:
