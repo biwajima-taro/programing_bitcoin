@@ -1,9 +1,10 @@
-from helper import int_to_little_endian, little_endian_to_int, read_variant, encode_variant
+from helper import int_to_little_endian, hash256SS, little_endian_to_int, read_variant, encode_variant
 from transaction_input import TxIn
 from transaction_output import TxOut
 from typing import List
 from io import BytesIO
 from script import Script
+SIGHASH_ALL = 1
 
 
 class Tx:
@@ -67,10 +68,20 @@ class Tx:
         s += encode_variant(len(self.tx_ins))
         for i, tx_in in enumerate(self.tx_ins):
             if i == input_index:
-                s += TxIn(prev_tx=tx_in.prev_index, prev_index=tx_in.prev_index,
+                s += TxIn(prev_tx=tx_in.prev_tx, prev_index=tx_in.prev_index,
                           script_sig=tx_in.script_pubkey(self.testnet),
+                          sequence=tx_in.sequence)
+            else:
+                s += TxIn(prev_tx=tx_in.prev_tx, prev_index=tx_in.prev_index,
+                          sequence=tx_in.sequence)
 
-                          )
+        s += encode_variant(len(self.tx_outs))
+        for tx_out in self.tx_outs:
+            s += tx_outs.serialize()
+        s += int_to_little_endian(self.locktime, 4)
+        s += int_to_little_endian(SIG)
+        h256 = hash256(s)
+        return int.from_bytes(h256, "big")
 
 
 class TxIn:
