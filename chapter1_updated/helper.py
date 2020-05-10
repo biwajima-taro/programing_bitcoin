@@ -1,5 +1,5 @@
 import hashlib
-
+from script import Script
 BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 
@@ -70,6 +70,10 @@ def decode_base58(s):
     combined = num.to_bytes(25, byteorder="big")
     checksum = combined[-4:]
     actual = hash256(combined[:-4])[:4]
-    if actual != cheecksum:
+    if actual != checksum:
         raise ValueError("bad address!  {actual}!={checksum}")
     return combined
+
+
+def p2pkh_script(h160: bytes):
+    return Script([0x76, 0xa9, h160, 0x88, 0xac])
