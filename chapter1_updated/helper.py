@@ -59,3 +59,17 @@ def encode_variant(length_: int):
         return b"\xff"+int_to_little_endian(length_, 8)
     else:
         raise ValueError(f"integer too large {length_}")
+
+
+def decode_base58(s):
+    num = 0
+    for c in s:
+        num *= 58
+        # index returns index  of c
+        num += BASE58_ALPHABET.index(c)
+    combined = num.to_bytes(25, byteorder="big")
+    checksum = combined[-4:]
+    actual = hash256(combined[:-4])[:4]
+    if actual != cheecksum:
+        raise ValueError("bad address!  {actual}!={checksum}")
+    return combined
