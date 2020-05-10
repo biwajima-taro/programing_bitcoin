@@ -4,7 +4,9 @@ from transaction_output import TxOut
 from typing import List
 from io import BytesIO
 from script import Script
+from transaction_fetcher import TxFetcher
 SIGHASH_ALL = 1
+
 
 
 class Tx:
@@ -15,7 +17,7 @@ class Tx:
 
     def fee(self, testnet=False):
         input_sum = 0
-        ouptut_sum = 0
+        outptut_sum = 0
         for txin in self.tx_ins:
             input_sum += txin.value(testnet)
         for txout in self.tx_outs:
@@ -82,6 +84,13 @@ class Tx:
         s += int_to_little_endian(SIG)
         h256 = hash256(s)
         return int.from_bytes(h256, "big")
+    
+    def verify_input(self, input_index: int):
+        tx_in: TxIn = self.tx_ins[input_index]
+        script_pubkey = tx_in.script_pubkey(testnet=self.testnet)
+        z = self.sig_hash(input_index)
+        comined = tx_in.script_sig+script_pubkey
+        return comined.evaluate()
 
 
 class TxIn:
@@ -91,6 +100,7 @@ class TxIn:
         if script_sig is None:
             self.script_sig = Script()
         else:
+
             self.script_sig = script_sig
         self.sequence = sequence
 
