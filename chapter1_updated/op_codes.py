@@ -1,6 +1,9 @@
 from typing import List, Any
 from hashlib import hash256
 from helper import hash160
+from secp256k1 import S256Point
+from signature import Signature
+
 OP_CODE_FUNCTIOINS = {118: op_dup,
                       170: op_hash256}
 OP_CODE_NAMES = {118: "op_dup"}
@@ -83,7 +86,7 @@ def decode_num(element: bytes) -> int:
     big_endian = element[::-1]
     if big_endian[0] & 0x80:
         negative = True
-        #if first byte is 1 then extract the rest 7bits
+        # if first byte is 1 then extract the rest 7bits
         result = big_endian[0] & 0x7f
     else:
         negative = False
@@ -97,8 +100,39 @@ def decode_num(element: bytes) -> int:
         return result
 
 
-def op_checksig(stack:List[Any]):
+def op_checksig(stack: List[Any]):
         # take off the last byte of the signature as that's the hash_type
-    
-    
-    return 
+
+    return
+
+
+def op_check_multisig(stack: List, z):
+    if len(stack) < 1:
+        return False
+    n = decode_num(stack.pop())
+    if len(stack) < n+1:
+        return False
+    sec_pubkeys = []
+    for _ in range(n):
+        sec_pubkeys.append(stack.pop())
+    der_signatures = []
+    m = decode_num(stack.pop())
+    if len(stack) < m+1:
+        return False
+    for _ in range(m):
+        der_signatures.append(stack.pop()[:-1])
+    stack.pop()
+    try:
+        points = [S256Point.parse(sec) for sec in sec_pubkeys]
+        sigs = [Signature.parse(der) for der in der_signatures]
+        for sig in sigs:
+            if len(points) == 0:
+                return False
+            while points:
+                point = points.pop(0)
+                if point.verify(z, sig):
+                    break
+        stack.append(encode_num(1))
+    except (ValueError, SyntaxError):
+        return False
+    return True
