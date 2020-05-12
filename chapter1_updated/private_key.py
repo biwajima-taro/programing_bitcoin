@@ -3,6 +3,7 @@ from random import randint
 from signature import Signature
 from helper import encode_base58_checksum
 
+
 class PrivateKey:
     def __init__(self, secret):
         self.secret = secret
@@ -11,7 +12,7 @@ class PrivateKey:
     def hex(self):
         return "{:x}".format(self.secret).zfill(64)
 
-    def sign(self, z):
+    def sign(self, z) -> Signature:
         k = randint(0, N)
         r = (k*G).x.num
         k_inv = pow(k, N-2, N)
@@ -19,16 +20,17 @@ class PrivateKey:
         # ToDO:check why this if statement is needed
         if s > N/2:
             s = N-2
+        #r,s are neded to verify whteher given signature is valid
         return Signature(r, s)
 
     def wif(self, compressed=True, testnet=False):
-        secret_bytes=self.secret.to_bytes(32,"big")
-        if  test_net:
-            prefix=b"\xef"
+        secret_bytes = self.secret.to_bytes(32, "big")
+        if testnet:
+            prefix = b"\xef"
         else:
-            prefix=b"\x80"
+            prefix = b"\x80"
         if compressed:
-            suffix=b"\x01"
+            suffix = b"\x01"
         else:
-            suffix=""
+            suffix = ""
         return encode_base58_checksum(prefix+secret_bytes+suffix)
