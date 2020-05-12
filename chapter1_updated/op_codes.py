@@ -9,6 +9,33 @@ OP_CODE_FUNCTIOINS = {118: op_dup,
 OP_CODE_NAMES = {118: "op_dup"}
 
 
+def op_equal(stack: List[Any]) -> bool:
+    """
+    compare top two element whther they are 
+    op_equal
+    Parameters
+    ----------
+    stack : List[Any]
+        [description]
+
+    Returns
+    -------
+    bool
+        [description]
+    """
+    if len(stack) < 2:
+        # to compare ,more than two elements are needed
+        return False
+    ele1 = stack.pop()
+    ele2 = stack.pop()
+    if ele1 == ele2:
+        stack.append(encode_num(1))
+        return True
+    stack.append(encode_num(0))
+    return False
+
+
+
 def op_dup(stack: List[Any]) -> bool:
     """
     duplicate the top element of  the stack
@@ -50,6 +77,20 @@ def op_hash256(stack: List[Any]) -> bool:
 
 
 def op_hash160(stack: List[Any]) -> bool:
+    """
+    convert top element into hash160 value
+
+    Parameters
+    ----------
+    stack : List[Any]
+        [description]
+
+    Returns
+    -------
+    bool
+        [description]
+    """
+
     if len(stack) < 1:
         return False
     element = stack.pop()
