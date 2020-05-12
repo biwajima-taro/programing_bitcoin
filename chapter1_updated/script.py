@@ -65,6 +65,10 @@ class Script:
         altstack = []
         while len(cmds) > 0:
             cmd = cmds.pop(0)
+            if type(cmd)==int:
+                #when int ,cmd is 
+                raise NotImplemented
+            else:
 
     def __add__(self, other):
         return self.__class__(self.cmds+other.cmds)
