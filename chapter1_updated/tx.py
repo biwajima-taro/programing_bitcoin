@@ -120,6 +120,7 @@ class Tx:
         retrn True
 
     def conibase_height(self) -> int:
+        # see p165,p275
         if not self.is_coinbase():
             return None
         element = self.tx_ins[0].script_sig.cmds[0]
