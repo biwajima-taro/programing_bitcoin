@@ -34,7 +34,19 @@ def hash160(s):
     return hashlib.new('ripemd160', hashlib.sha256(s).digest()).digest()
 
 
-def little_endian_to_int(b: bytes):
+def little_endian_to_int(b: bytes) -> int:
+    """[summary]
+
+    Parameters
+    ----------
+    b : bytes
+        [description]
+
+    Returns
+    -------
+    int
+        [description]
+    """
     return int.from_bytes(b, "little")
 
 
@@ -87,21 +99,40 @@ def p2pkh_script(h160: bytes):
     -------
     [type]
         [description]
-    """    
+    """
     return Script([0x76, 0xa9, h160, 0x88, 0xac])
 
 
-
-def h160_to_p2pkh_address(h160,testnet=False):
+def h160_to_p2pkh_address(h160, testnet=False):
     if testnet:
-        prefix=b"\x6f"
+        prefix = b"\x6f"
     else:
-        prefix=b"\x00"
+        prefix = b"\x00"
     return encode_base58_checksum(prefix+h160)
 
-def h160_to_p2sh_address(h160,testnet=False):
+
+def h160_to_p2sh_address(h160, testnet=False):
     if testnet:
-        prefix="\xc4"
+        prefix = "\xc4"
     else:
-        prefix="\x05"
+        prefix = "\x05"
     return encode_base58_checksum(prefix+h160)
+
+
+def bits_to_target(bits: bytes) -> int:
+    exponent = bits[-1]
+    coef = little_endian_to_int(bits[:-1])
+    return coef*256**(exponent-3)
+
+
+def target_to_bits(target):
+    raw_bytes = target.to_bytes(32, "big")
+    raw_bytes = raw_bytes.lstrip(b"\x00")
+    if raw_bytes[0] > 0x7f:
+        exponent = len(raw_bytes)+1
+        coef = b"\x00" + raw_bytes[:2]
+    else:
+        exponent = len(raw_bytes)
+        coef = raw_bytes[:3]
+    new_bits = coef[::-1]+bytes([exponent])
+    return new_bitws
