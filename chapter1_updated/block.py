@@ -1,16 +1,19 @@
-from helper import little_endian_to_int, bits_to_target
-hash256, int_to_little_endian
+from helper import little_endian_to_int, \
+    bits_to_target, hash256, int_to_little_endian
+from helper import merkle_parent_level
 
 
 class Block:
     def __init__(self, version, prev_block,
-                 merkle_root, timestamp, bits, nonce):
+                 merkle_root, timestamp,
+                 bits, nonce, tx_hashes):
         self.version = version
         self.prev_block = prev_block
         self.merkle_root = merkle_root
         self.tiemstamp = timestamp
         self.bits = bits
         self.nonce = nonce
+        self.tx_hashes = tx_hashes
 
     @classmethod
     def parse(cls, s: str):
@@ -70,3 +73,8 @@ class Block:
     def target(self):
         '''Returns the proof-of-work target based on the bits'''
         return bits_to_target(self.bits)
+
+    def validate_merkle_root(self) -> bool:
+        hashes = [hash_[::-1] for hash]_ in self.tx_hashes]
+        root = merkle_root(hashes)
+        return root[: : -1] == self.merkle_root

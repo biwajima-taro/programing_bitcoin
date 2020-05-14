@@ -1,5 +1,6 @@
 import hashlib
 from script import Script
+from typing import List
 BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 
@@ -136,3 +137,46 @@ def target_to_bits(target):
         coef = raw_bytes[:3]
     new_bits = coef[::-1]+bytes([exponent])
     return new_bitws
+
+
+def merkle_parent(hash1, hash2):
+
+    return hash256(hash1+hash2)
+
+
+def merkle_parent_level(hashes: List) -> List:
+    """[summary]
+
+    Parameters
+    ----------
+    hashes : List
+        [description]
+
+    Returns
+    -------
+    List
+        [description]
+
+    Raises
+    ------
+    RuntimeError
+        [description]
+    """
+
+    if len(hashes) == 1:
+        raise RuntimeError(
+            "cannot take a parent level from a list with only 1 element")
+    if len(hashes) % 2 == 1:
+        hashes.append(hashes[-1])
+    parent_level = []
+    for i in range(0, len(hashes), 2):
+        parent = merkle_parent(hashes[i], hashes[i+1])
+        parent_level.append(parent)
+    return parent_level
+
+
+def merkle_root(hashes: List):
+    current_level = hashes
+    while len(current_level) > 1:
+        current_level = merkle_parent_level(current_level)
+    return current_level[0]
