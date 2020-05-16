@@ -69,6 +69,26 @@ class Script:
                 #when int ,cmd is 
                 raise NotImplemented
             else:
+                raise NotImplemented
 
     def __add__(self, other):
         return self.__class__(self.cmds+other.cmds)
+
+
+
+def p2pkh_script(h160: bytes):
+    """[summary]
+    return p2pkh script pubkey
+    Parameters
+    ----------
+    h160 : bytes
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
+    return Script([0x76, 0xa9, h160, 0x88, 0xac])
+
+
