@@ -180,3 +180,12 @@ def merkle_root(hashes: List):
     while len(current_level) > 1:
         current_level = merkle_parent_level(current_level)
     return current_level[0]
+
+
+def bytes_to_bit_field(some_bytes: bytes) -> List[int]:
+    flag_bits = []
+    for byte in some_bytes:
+        for _ in range(8):
+            flag_bits.append(byte & 1)
+            byte >>= 1
+    return flag_bits
